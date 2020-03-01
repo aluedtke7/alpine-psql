@@ -25,23 +25,23 @@ jobs:
     - name: Push image
       run: |
         IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
-        echo $IMAGE_ID
+        echo "1 - "$IMAGE_ID
         docker image ls
 
         # Strip git ref prefix from version
         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-        echo $VERSION
+        echo "2 - "$VERSION
 
         # Strip "v" prefix from tag name
         [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-        echo $VERSION
+        echo "3 - "$VERSION
 
         # Use Docker `latest` tag convention
         [ "$VERSION" == "master" ] && VERSION=latest
-        echo $VERSION
+        echo "4 - "$VERSION
 
-        echo IMAGE_ID=$IMAGE_ID
-        echo VERSION=$VERSION
+        echo "5 - "IMAGE_ID=$IMAGE_ID
+        echo "6 - "VERSION=$VERSION
 
-        docker tag image $IMAGE_ID:$VERSION
-        docker push $IMAGE_ID:$VERSION
+        # docker tag image $IMAGE_ID:$VERSION
+        docker push $IMAGE_NAME:$VERSION
