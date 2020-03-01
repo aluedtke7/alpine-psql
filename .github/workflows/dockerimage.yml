@@ -12,7 +12,9 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag andreasluedtke/alpine-psql:latest
+      run: |
+        docker build . --file Dockerfile --tag andreasluedtke/alpine-psql:latest
+        docker image ls
 
     - name: Log into registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
@@ -21,6 +23,8 @@ jobs:
       run: |
         IMAGE_NAME=andreasluedtke/alpine-psql
         IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+        echo $IMAGE_ID
+        docker image ls
 
         # Strip git ref prefix from version
         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
